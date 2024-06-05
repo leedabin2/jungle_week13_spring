@@ -1,0 +1,55 @@
+package com.jungle.week13.post.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "post")
+public class Post{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "link")
+    private String link;
+
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "score")
+    private Integer score;
+
+    @Column(name = "author")
+    private String author;
+
+    @Column(name = "password")
+    private String password;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime created_at;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updated_at;
+
+
+
+}
