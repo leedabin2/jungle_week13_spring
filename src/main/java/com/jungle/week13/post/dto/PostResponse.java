@@ -25,6 +25,7 @@ public class PostResponse {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
+    /* 정적 팩토리 메서드 */
     public static PostResponse of(Post post) {
         return PostResponse.builder()
                 .id(post.getId())
@@ -33,7 +34,6 @@ public class PostResponse {
                 .category(post.getCategory())
                 .score(post.getScore())
                 .author(post.getAuthor())
-                .password(post.getPassword())
                 .created_at(post.getCreated_at())
                 .updated_at(post.getUpdated_at())
                 .build();

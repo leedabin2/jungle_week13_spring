@@ -18,7 +18,6 @@ public class CommonResponse<T> {
     private T data;
 
 
-
     // 정적 팩토리 메서드
     public static <T> CommonResponse<T> success(T data,String message){
         return CommonResponse.<T>builder()
