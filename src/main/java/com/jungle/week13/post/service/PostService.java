@@ -2,6 +2,7 @@ package com.jungle.week13.post.service;
 
 
 import com.jungle.week13.common.dto.CommonResponse;
+import com.jungle.week13.exception.PostNotFoundException;
 import com.jungle.week13.post.dto.PostRequest;
 import com.jungle.week13.post.dto.PostResponse;
 import com.jungle.week13.post.entity.Post;
@@ -28,6 +29,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final ModelMapper modelMapper;
 
+    /* 게시글 작성 관련 메서드 */
     public CommonResponse<PostResponse> createPostAndSave(PostRequest dto) {
 
         Post post = Post.builder()
@@ -58,6 +60,7 @@ public class PostService {
         }
     };
 
+    /* 전체 게시글을 조회하는 메서드 */
     public CommonResponse<List<PostResponse>> getAllPost() {
 
         try {
@@ -87,4 +90,27 @@ public class PostService {
         }
 
     };
+
+    /* 선택 게시글 조회하는 메서드 */
+    public CommonResponse<PostResponse> getPostById(final long id) {
+         try {
+             Post post = postRepository.findById(id)
+                     .orElseThrow(() -> new PostNotFoundException(id));
+
+             log.info("post 선택 게시글 조회 성공");
+
+             // db에 가져온 선택 게시글을 dto로 변환
+             /* 정적 팩토리 메서드 패턴 */
+             PostResponse postResponse = PostResponse.of(post);
+
+             return CommonResponse.success(postResponse, "선택 게시글 조회 성공");
+
+         } catch (Exception e) {
+             log.error("post 선택 게시글 조회 실패");
+             return CommonResponse.error(500,"선택 게시글 목록 조회 실패");
+
+         }
+    };
+
+
 }

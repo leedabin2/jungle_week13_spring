@@ -36,7 +36,12 @@ public class PostController {
 
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPostById(@PathVariable("id") final long id) {
 
+        CommonResponse<PostResponse> responses = postService.getPostById(id);
 
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
 
 }
