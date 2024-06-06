@@ -36,10 +36,10 @@ public class Post{
     @Column(name = "score")
     private Integer score;
 
-    @Column(name = "author")
+    @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @CreatedDate
