@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 
@@ -113,6 +114,36 @@ public class PostService {
              return CommonResponse.error(500,"선택 게시글 목록 조회 실패");
 
          }
+    };
+
+    /* 게시글 수정하는 메서드 */
+    public CommonResponse<PostResponse> updatePost(final long id, PostRequest dto) {
+
+        // id에 해당하는 게시글 찾아오기
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException(id));
+
+        // 비밀번호와 일치하는지 확인하기
+        if (Objects.equals(post.getPassword(), dto.getPassword())) {
+            // dto를 다시 수정된 걸로 post 변경
+            Post.builder()
+                    .title(dto.getTitle())
+                    .author(dto.getAuthor())
+                    .content(dto.getContent())
+                    .link(dto.getLink())
+                    .category(dto.getCategory())
+                    .score(dto.getScore())
+                    .password(dto.getPassword())
+                    .build();
+
+            Post updatePost = postRepository.save(post);
+
+            PostResponse postResponse = PostResponse.of(updatePost);
+
+            return CommonResponse.success(postResponse, "update 게시글 수정 완료");
+        }
+
+      return CommonResponse.error(500, "update 게시글 수정 실패");
     };
 
 

@@ -1,7 +1,6 @@
 package com.jungle.week13.common.dto;
 
 
-import com.jungle.week13.post.dto.PostResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,5 +32,6 @@ public class CommonResponse<T> {
                 .message(message)
                 .build();
     }
+
 
 }
