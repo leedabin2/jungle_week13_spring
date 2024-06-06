@@ -2,6 +2,7 @@ package com.jungle.week13.post.controller;
 
 
 import com.jungle.week13.common.dto.CommonResponse;
+import com.jungle.week13.post.dto.PostDeleteRequest;
 import com.jungle.week13.post.dto.PostRequest;
 import com.jungle.week13.post.dto.PostResponse;
 import com.jungle.week13.post.service.PostService;
@@ -51,6 +52,12 @@ public class PostController {
         CommonResponse<PostResponse> responses = postService.updatePost(id, dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePost(@PathVariable("id") final long id, @RequestBody @Valid PostDeleteRequest dto) {
+        postService.deletePost(id,dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

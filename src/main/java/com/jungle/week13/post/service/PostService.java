@@ -2,7 +2,9 @@ package com.jungle.week13.post.service;
 
 
 import com.jungle.week13.common.dto.CommonResponse;
+import com.jungle.week13.exception.InvaildPasswordException;
 import com.jungle.week13.exception.PostNotFoundException;
+import com.jungle.week13.post.dto.PostDeleteRequest;
 import com.jungle.week13.post.dto.PostRequest;
 import com.jungle.week13.post.dto.PostResponse;
 import com.jungle.week13.post.entity.Post;
@@ -146,5 +148,18 @@ public class PostService {
       return CommonResponse.error(500, "update 게시글 수정 실패");
     };
 
+    /* 게시글을 삭제하는 메서드 */
+    public void deletePost(final long id, PostDeleteRequest dto) {
+        Post post = postRepository.findById(id)
+                .orElseThrow( () -> new PostNotFoundException(id));
+
+        if (Objects.equals(post.getPassword(), dto.getPassword())) {
+            log.info("delete 게시글 삭제 완료");
+            postRepository.delete(post);
+        } else {
+            log.error("delete 게시글 삭제 실패");
+            throw new InvaildPasswordException("비밀번호가 일치하지 않습니다.");
+        }
+    }
 
 }
