@@ -48,6 +48,9 @@ public class PostService {
             savePost = postRepository.save(post); //db에 저장
             log.info("post 작성 저장 성공");
 
+            if (savePost == null) {
+                throw new RuntimeException("post : db에 저장 실패");
+            }
 
             /* 정적 팩토리 메서드 패턴 */
             PostResponse postResponse = PostResponse.of(savePost);
