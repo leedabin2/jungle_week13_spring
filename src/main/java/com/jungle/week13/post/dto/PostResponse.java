@@ -30,6 +30,7 @@ public class PostResponse {
         return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
+                .content(post.getContent())
                 .link(post.getLink())
                 .category(post.getCategory())
                 .score(post.getScore())
