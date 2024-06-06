@@ -28,9 +28,9 @@ public class PostController {
     };
 
     @GetMapping
-    public ResponseEntity<List<PostResponse>> getAllPost() {
+    public ResponseEntity<CommonResponse<List<PostResponse>>> getAllPost() {
 
-        List<PostResponse> responses = postService.getAllPost();
+        CommonResponse<List<PostResponse>> responses = postService.getAllPost();
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
 

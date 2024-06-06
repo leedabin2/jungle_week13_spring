@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.modelmapper.ModelMapper;
 
 @Slf4j
 @Service
@@ -25,6 +26,7 @@ public class PostService {
     // 필요한 정보만 json형태로 변환해서 반환 컨트롤러에게
 
     private final PostRepository postRepository;
+    private final ModelMapper modelMapper;
 
     public CommonResponse<PostResponse> createPostAndSave(PostRequest dto) {
 
@@ -56,25 +58,32 @@ public class PostService {
         }
     };
 
-    public List<PostResponse> getAllPost() {
+    public CommonResponse<List<PostResponse>> getAllPost() {
 
         try {
             // 날짜 순으로 내림차순 정렬
             List<Post> existingPost = postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
 
             // 존재하지 않는다면, 에러 처리하는 부분 추가
+            if (existingPost.isEmpty()) {
+                return CommonResponse.error(404,"게시글이 존재하지 않습니다.");
+            }
 
 
             log.info("post 전체 게시글 조회 성공");
             // db에 가져온 목록을 리스트 dto로 변환해서 리턴해줌
-            return existingPost.stream()
-                    .map(PostResponse::of)
+            List<PostResponse> responses = existingPost.stream()
+                    .map(post -> modelMapper.map(post, PostResponse.class))
                     .collect(Collectors.toList());
+            return CommonResponse.success(responses,"게시글 목록 조회 성공");
+//            return existingPost.stream()
+//                    .map(PostResponse::of)
+//                    .collect(Collectors.toList());
 
 
         } catch (Exception e) {
             log.error("post 전체 게시글 조회 실패" ,e);
-            return null;
+            return CommonResponse.error(500,"게시글 목록 조회 실패");
         }
 
     };
