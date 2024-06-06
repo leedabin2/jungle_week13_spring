@@ -8,8 +8,12 @@ import com.jungle.week13.post.entity.Post;
 import com.jungle.week13.post.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,6 +53,28 @@ public class PostService {
         } catch (Exception e) {
             log.error("post 작성 저장 실패 : ",e);
             return CommonResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "게시글 작성 실패");
+        }
+    };
+
+    public List<PostResponse> getAllPost() {
+
+        try {
+            // 날짜 순으로 내림차순 정렬
+            List<Post> existingPost = postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
+
+            // 존재하지 않는다면, 에러 처리하는 부분 추가
+
+
+            log.info("post 전체 게시글 조회 성공");
+            // db에 가져온 목록을 리스트 dto로 변환해서 리턴해줌
+            return existingPost.stream()
+                    .map(PostResponse::of)
+                    .collect(Collectors.toList());
+
+
+        } catch (Exception e) {
+            log.error("post 전체 게시글 조회 실패" ,e);
+            return null;
         }
 
     };

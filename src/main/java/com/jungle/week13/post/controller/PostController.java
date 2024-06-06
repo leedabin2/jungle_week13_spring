@@ -8,10 +8,9 @@ import com.jungle.week13.post.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -27,6 +26,15 @@ public class PostController {
 
         return ResponseEntity.status(HttpStatus.OK).body(postResponse);
     };
+
+    @GetMapping
+    public ResponseEntity<List<PostResponse>> getAllPost() {
+
+        List<PostResponse> responses = postService.getAllPost();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responses);
+
+    }
 
 
 

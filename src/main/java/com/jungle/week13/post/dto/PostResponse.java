@@ -35,8 +35,8 @@ public class PostResponse {
                 .category(post.getCategory())
                 .score(post.getScore())
                 .author(post.getAuthor())
-                .created_at(post.getCreated_at())
-                .updated_at(post.getUpdated_at())
+                .created_at(post.getCreatedAt())
+                .updated_at(post.getUpdatedAt())
                 .build();
 
     }
