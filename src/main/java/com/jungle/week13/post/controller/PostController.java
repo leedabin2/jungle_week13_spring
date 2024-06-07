@@ -26,7 +26,7 @@ public class PostController {
         // 변환된 response dto 객체를 서비스 레이어의 메서드에서 받아옴
         CommonResponse<PostResponse> postResponse = postService.createPostAndSave(dto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(postResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(postResponse);
     };
 
     @GetMapping

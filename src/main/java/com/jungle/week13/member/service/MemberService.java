@@ -50,7 +50,7 @@ public class MemberService {
             return CommonResponse.success("회원 가입 성공","회원가입을 환영합니다.");
         } catch (DataIntegrityViolationException e) { // 데이터 무결성 검사
             log.error("회원 가입 실패 ",addMemberDto.getUsername(), e.getMessage());
-            return CommonResponse.error(HttpStatus.BAD_REQUEST.value(),"회원가입 실패");
+            return CommonResponse.error(HttpStatus.BAD_REQUEST,"회원가입 실패");
         }
 
 

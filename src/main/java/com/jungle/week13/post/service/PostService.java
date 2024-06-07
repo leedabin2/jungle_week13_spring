@@ -64,7 +64,7 @@ public class PostService {
 
         } catch (Exception e) {
             log.error("post 작성 저장 실패 : ",e);
-            return CommonResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "게시글 작성 실패");
+            return CommonResponse.error(HttpStatus.BAD_REQUEST, "게시글 작성 실패");
         }
     };
 
@@ -77,7 +77,7 @@ public class PostService {
 
             // 존재하지 않는다면, 에러 처리하는 부분 추가
             if (existingPost.isEmpty()) {
-                return CommonResponse.error(404,"게시글이 존재하지 않습니다.");
+                return CommonResponse.error(HttpStatus.NOT_FOUND,"게시글이 존재하지 않습니다.");
             }
 
 
@@ -94,7 +94,7 @@ public class PostService {
 
         } catch (Exception e) {
             log.error("post 전체 게시글 조회 실패" ,e);
-            return CommonResponse.error(500,"게시글 목록 조회 실패");
+            return CommonResponse.error(HttpStatus.BAD_REQUEST,"게시글 목록 조회 실패");
         }
     };
 
@@ -114,7 +114,7 @@ public class PostService {
 
          } catch (Exception e) {
              log.error("post 선택 게시글 조회 실패");
-             return CommonResponse.error(500,"선택 게시글 목록 조회 실패");
+             return CommonResponse.error(HttpStatus.BAD_REQUEST,"선택 게시글 목록 조회 실패");
 
          }
     };
@@ -146,7 +146,7 @@ public class PostService {
             return CommonResponse.success(postResponse, "update 게시글 수정 완료");
         }
 
-      return CommonResponse.error(500, "update 게시글 수정 실패");
+      return CommonResponse.error(HttpStatus.BAD_REQUEST, "update 게시글 수정 실패");
     };
 
     /* 게시글을 삭제하는 메서드 */

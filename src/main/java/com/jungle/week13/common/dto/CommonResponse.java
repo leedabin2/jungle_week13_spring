@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Data
 @Builder
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommonResponse<T> {
 
-    private int code;
+    private HttpStatus code;
     private String message;
     private T data;
 
@@ -20,13 +21,13 @@ public class CommonResponse<T> {
     // 정적 팩토리 메서드
     public static <T> CommonResponse<T> success(T data,String message){
         return CommonResponse.<T>builder()
-                .code(0)
+                .code(HttpStatus.OK) // 일반 성공 응답
                 .message(message)
                 .data(data)
                 .build();
     }
 
-    public static <T> CommonResponse<T> error(int code, String message){
+    public static <T> CommonResponse<T> error(HttpStatus code, String message){
         return CommonResponse.<T>builder()
                 .code(code)
                 .message(message)

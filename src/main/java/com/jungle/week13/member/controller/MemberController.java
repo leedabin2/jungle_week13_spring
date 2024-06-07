@@ -35,7 +35,7 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.CREATED).body(registerResponse); // 201 Created
         } catch (DuplicateMemberException e) {
             // 아이디 중복 예외 처리
-            return ResponseEntity.badRequest().body(CommonResponse.error(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+            return ResponseEntity.badRequest().body(CommonResponse.error(HttpStatus.CONFLICT, e.getMessage()));
         }
     }
 }

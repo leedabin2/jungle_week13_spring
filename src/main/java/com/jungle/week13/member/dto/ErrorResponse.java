@@ -1,6 +1,7 @@
 package com.jungle.week13.member.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Builder
 @NoArgsConstructor
 public class ErrorResponse {
 
