@@ -1,4 +1,4 @@
-package com.jungle.week13.post.entity;
+package com.jungle.week13.member.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +15,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Member {
 
+    public enum MemberRole {
+        USER,
+        ADMIN
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -26,7 +31,7 @@ public class Member {
     private String password;
 
     @Column(name = "role")
-    private Enum role;
+    private MemberRole role;
 
     @Column(name = "created_at")
     private LocalDateTime created_at;
