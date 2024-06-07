@@ -48,12 +48,14 @@ public class PostService {
 
         Post savePost = null;
         try {
-            savePost = postRepository.save(post); //db에 저장
+            savePost = postRepository.save(post);
+
             log.info("post 작성 저장 성공");
 
             if (savePost == null) {
                 throw new RuntimeException("post : db에 저장 실패");
             }
+
 
             /* 정적 팩토리 메서드 패턴 */
             PostResponse postResponse = PostResponse.of(savePost);
@@ -71,7 +73,7 @@ public class PostService {
 
         try {
             // 날짜 순으로 내림차순 정렬
-            List<Post> existingPost = postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
+            List<Post> existingPost = postRepository.findAll(Sort.by(Sort.Direction.DESC,"updatedAt"));
 
             // 존재하지 않는다면, 에러 처리하는 부분 추가
             if (existingPost.isEmpty()) {
@@ -94,7 +96,6 @@ public class PostService {
             log.error("post 전체 게시글 조회 실패" ,e);
             return CommonResponse.error(500,"게시글 목록 조회 실패");
         }
-
     };
 
     /* 선택 게시글 조회하는 메서드 */
@@ -149,13 +150,14 @@ public class PostService {
     };
 
     /* 게시글을 삭제하는 메서드 */
-    public void deletePost(final long id, PostDeleteRequest dto) {
+    public CommonResponse<String> deletePost(final long id, PostDeleteRequest dto) {
         Post post = postRepository.findById(id)
                 .orElseThrow( () -> new PostNotFoundException(id));
 
         if (Objects.equals(post.getPassword(), dto.getPassword())) {
             log.info("delete 게시글 삭제 완료");
             postRepository.delete(post);
+            return CommonResponse.success("게시글 삭제 성공","게시글 삭제를 성공했습니다.");
         } else {
             log.error("delete 게시글 삭제 실패");
             throw new InvaildPasswordException("비밀번호가 일치하지 않습니다.");
