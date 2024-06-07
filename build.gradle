@@ -17,6 +17,9 @@ repositories {
 
 dependencies {
 
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	// model mapper
 	implementation 'org.modelmapper:modelmapper:3.1.1'
 
