@@ -16,6 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -46,6 +47,7 @@ public class MemberService {
                     .username(addMemberDto.getUsername())
                     .password(passwordEncoder.encode(addMemberDto.getPassword()))
                     .role(Member.MemberRole.USER)
+                    .createdAt(LocalDateTime.now())
                     .build();
 
             memberRepository.save(member);
@@ -71,5 +73,4 @@ public class MemberService {
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, JwtUtil.createToken(authDto.getUsername()));
     }
-
 }
