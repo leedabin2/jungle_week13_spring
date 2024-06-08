@@ -5,6 +5,7 @@ import com.jungle.week13.common.dto.CommonResponse;
 import com.jungle.week13.exception.DuplicateMemberException;
 import com.jungle.week13.member.dto.AuthRequest;
 import com.jungle.week13.member.service.MemberService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,5 +38,15 @@ public class MemberController {
             // 아이디 중복 예외 처리
             return ResponseEntity.badRequest().body(CommonResponse.error(HttpStatus.CONFLICT, e.getMessage()));
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authDto, BindingResult bindingResult, HttpServletResponse response) throws MethodArgumentNotValidException {
+
+        if (bindingResult.hasErrors())
+            throw new MethodArgumentNotValidException(null,bindingResult);
+
+        memberService.login(authDto,response);
+        return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success("로그인 성공", "로그인에 성공했습니다. "));
     }
 }
