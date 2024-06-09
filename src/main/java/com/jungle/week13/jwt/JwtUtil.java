@@ -3,11 +3,13 @@ package com.jungle.week13.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.Cookie;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Base64;
@@ -37,6 +39,10 @@ public class JwtUtil {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         SECRET_KEY = Keys.hmacShaKeyFor(bytes);
     }
+    public static Key getSecretKey() {
+        return SECRET_KEY;
+    }
+
 
     /* 토큰 생성 */
     public static String createToken(String username) {
@@ -58,16 +64,16 @@ public class JwtUtil {
     /* 토큰 유효성 검사 로직 */
     public static boolean validateToken(String token) {
         try {
-            Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJwt(token).getBody();
+            Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
             System.out.println("Token claims: " + claims.toString());
             return true;
         } catch ( SecurityException | MalformedJwtException e) {
             log.info("유효하지 않는 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT token 입니다.");
-        } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰 입니다.");
-        } catch (IllegalArgumentException e) {
+        }  catch (UnsupportedJwtException e) {
+            log.error("지원되지 않는 JWT 토큰입니다.", e);
+        }  catch (IllegalArgumentException e) {
             log.info("잘못된 JWT 토큰 입니다.");
             throw new IllegalArgumentException();
         }
@@ -78,5 +84,6 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJwt(token).getBody();
     }
+
 
 }

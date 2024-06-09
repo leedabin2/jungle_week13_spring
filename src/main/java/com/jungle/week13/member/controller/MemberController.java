@@ -4,6 +4,7 @@ package com.jungle.week13.member.controller;
 import com.jungle.week13.common.dto.CommonResponse;
 import com.jungle.week13.exception.DuplicateMemberException;
 import com.jungle.week13.member.dto.AuthRequest;
+import com.jungle.week13.member.dto.ErrorResponse;
 import com.jungle.week13.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -48,5 +49,6 @@ public class MemberController {
 
         memberService.login(authDto,response);
         return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success("로그인 성공", "로그인에 성공했습니다. "));
+
     }
 }

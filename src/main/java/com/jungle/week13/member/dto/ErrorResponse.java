@@ -21,7 +21,6 @@ public class ErrorResponse {
         this.errors = errors;
     }
 
-
     public static ErrorResponse of(BindingResult bindingResult) {
         return new ErrorResponse(ErrorField.of(bindingResult));
     }
@@ -31,7 +30,7 @@ public class ErrorResponse {
     @NoArgsConstructor
     public static class ErrorField {
         private String field;
-        private String reaseon;
+        private String reason;
 
         public static List<ErrorField> of(BindingResult bindingResult) {
             List<ErrorField> errorFields = bindingResult.getAllErrors().stream()
@@ -39,5 +38,6 @@ public class ErrorResponse {
                     new ErrorField(((FieldError) error).getField(), ((FieldError) error).getDefaultMessage())).collect(Collectors.toList());
             return errorFields;
         }
+
     }
 }
