@@ -1,5 +1,6 @@
 package com.jungle.week13.post.entity;
 
+import com.jungle.week13.post.dto.PostRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -50,4 +51,13 @@ public class Post{
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    public void update(PostRequest dto) {
+        this.title = dto.getTitle();
+        this.author = dto.getAuthor();
+        this.content = dto.getContent();
+        this.link = dto.getLink();
+        this.category = dto.getCategory();
+        this.score = dto.getScore();
+        this.password = dto.getPassword();
+    }
 }
