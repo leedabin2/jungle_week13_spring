@@ -129,7 +129,7 @@ public class PostService {
         // 비밀번호와 일치하는지 확인하기
         if (Objects.equals(post.getPassword(), dto.getPassword())) {
             // dto를 다시 수정된 걸로 post 변경
-            Post.builder()
+            Post updatePost = Post.builder()
                     .title(dto.getTitle())
                     .author(dto.getAuthor())
                     .content(dto.getContent())
@@ -139,13 +139,14 @@ public class PostService {
                     .password(dto.getPassword())
                     .build();
 
-            Post updatePost = postRepository.save(post);
+            updatePost = postRepository.save(updatePost);
 
             PostResponse postResponse = PostResponse.of(updatePost);
 
             return CommonResponse.success(postResponse, "update 게시글 수정 완료");
         }
-
+        // 비밀번호가 일치하지 않는다면(추후 예외처리 추가)
+//        throw new InvaildPasswordException("비밀번호가 일치하지 않습니다.");
       return CommonResponse.error(HttpStatus.BAD_REQUEST, "update 게시글 수정 실패");
     };
 
