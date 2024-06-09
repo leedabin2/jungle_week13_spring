@@ -28,11 +28,26 @@ public class Post{
     @Column(name = "content")
     private String content;
 
+    @Column(name = "example")
+    private String example;
+
     @Column(name = "link")
     private String link;
 
     @Column(name = "category")
     private String category;
+
+    @Column(name = "is_success")
+    private Boolean is_success;
+
+    @Column(name = "is_review")
+    private Boolean is_review;
+
+    @Column(name = "note")
+    private String note;
+
+    @Column(name = "code")
+    private String code;
 
     @Column(name = "score")
     private Integer score;
@@ -55,8 +70,13 @@ public class Post{
         this.title = dto.getTitle();
         this.author = dto.getAuthor();
         this.content = dto.getContent();
+        this.example = dto.getExample();
         this.link = dto.getLink();
         this.category = dto.getCategory();
+        this.is_success = dto.getIs_success();
+        this.is_review = dto.getIs_review();
+        this.note = dto.getNote();
+        this.code = dto.getCode();
         this.score = dto.getScore();
         this.password = dto.getPassword();
     }

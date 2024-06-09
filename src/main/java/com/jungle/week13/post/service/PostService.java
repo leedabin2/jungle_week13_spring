@@ -39,8 +39,13 @@ public class PostService {
                         .title(dto.getTitle())
                         .author(dto.getAuthor())
                         .content(dto.getContent())
+                        .example(dto.getExample())
                         .link(dto.getLink())
                         .category(dto.getCategory())
+                        .is_success(dto.getIs_success())
+                        .is_review(dto.getIs_review())
+                        .note(dto.getNote())
+                        .code(dto.getCode())
                         .score(dto.getScore())
                         .password(dto.getPassword())
 

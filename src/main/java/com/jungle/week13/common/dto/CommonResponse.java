@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,6 +18,7 @@ public class CommonResponse<T> {
     private HttpStatus code;
     private String message;
     private T data;
+//    private PostData<T> data;
 
 
     // 정적 팩토리 메서드

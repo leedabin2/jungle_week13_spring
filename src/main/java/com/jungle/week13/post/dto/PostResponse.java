@@ -17,8 +17,13 @@ public class PostResponse {
     private Long id;
     private String title;
     private String content;
+    private String example;
     private String link;
     private String category;
+    private Boolean is_success;
+    private Boolean is_review;
+    private String note;
+    private String code;
     private Integer score;
     private String author;
 //    private String password;
@@ -31,8 +36,13 @@ public class PostResponse {
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
+                .example(post.getExample())
                 .link(post.getLink())
                 .category(post.getCategory())
+                .is_success(post.getIs_success())
+                .is_review(post.getIs_review())
+                .note(post.getNote())
+                .code(post.getCode())
                 .score(post.getScore())
                 .author(post.getAuthor())
                 .created_at(post.getCreatedAt())
