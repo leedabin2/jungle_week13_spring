@@ -20,8 +20,8 @@ public class PostByMemberResponse {
     private Boolean is_success;
     private Boolean is_review;
     private String link;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     /* 정적 팩토리 메서드 */
     public static PostByMemberResponse of(Post post) {
@@ -32,8 +32,8 @@ public class PostByMemberResponse {
                 .source(post.getSource())
                 .is_success(post.getIs_success())
                 .is_review(post.getIs_review())
-                .created_at(post.getCreatedAt())
-                .updated_at(post.getUpdatedAt())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
                 .build();
 
     }

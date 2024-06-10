@@ -26,8 +26,8 @@ public class PostResponse {
     private String code;
     private Integer score;
     private String language;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     /* 정적 팩토리 메서드 */
     public static PostResponse of(Post post) {
@@ -43,8 +43,8 @@ public class PostResponse {
                 .note(post.getNote())
                 .code(post.getCode())
                 .language(post.getLanguage())
-                .created_at(post.getCreatedAt())
-                .updated_at(post.getUpdatedAt())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
                 .build();
 
     }
