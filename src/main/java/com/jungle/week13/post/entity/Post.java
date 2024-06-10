@@ -26,10 +26,10 @@ public class Post{
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content",  columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "example")
+    @Column(name = "example", columnDefinition = "TEXT")
     private String example;
 
     @Column(name = "link")
@@ -44,10 +44,10 @@ public class Post{
     @Column(name = "is_review")
     private Boolean is_review;
 
-    @Column(name = "note")
+    @Column(name = "note", columnDefinition = "TEXT")
     private String note;
 
-    @Column(name = "code")
+    @Column(name = "code", columnDefinition = "TEXT")
     private String code;
 
     @Column(name = "language")
