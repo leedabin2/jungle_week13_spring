@@ -5,16 +5,13 @@ import com.jungle.week13.common.dto.CommonResponse;
 import com.jungle.week13.exception.InvaildPasswordException;
 import com.jungle.week13.exception.MemberNotFoundException;
 import com.jungle.week13.exception.PostNotFoundException;
-import com.jungle.week13.jwt.JwtUtil;
 import com.jungle.week13.jwt.JwtValidator;
 import com.jungle.week13.member.entity.Member;
 import com.jungle.week13.member.repository.MemberRepository;
-import com.jungle.week13.post.dto.PostDeleteRequest;
 import com.jungle.week13.post.dto.PostRequest;
 import com.jungle.week13.post.dto.PostResponse;
 import com.jungle.week13.post.entity.Post;
 import com.jungle.week13.post.repository.PostRepository;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +32,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
-    private final JwtUtil jwtUtil;
     private final JwtValidator jwtValidator;
 
     /* 게시글 작성 관련 메서드 */
@@ -60,7 +56,6 @@ public class PostService {
                         .note(dto.getNote())
                         .code(dto.getCode())
                         .score(dto.getScore())
-                        .password(dto.getPassword())
                         .member(member)
                 .build();
 
@@ -147,8 +142,7 @@ public class PostService {
         // 게시글의 username 을찾아서 토큰에서 추출한 username과 post의 username과 같으면
         String username = jwtValidator.getUserNameFromToken(request);
 
-        // 비밀번호와 일치하는지 확인하기
-        if (Objects.equals(post.getPassword(), dto.getPassword()) && Objects.equals(post.getMember().getUsername(), username)) {
+        if (Objects.equals(post.getMember().getUsername(), username)) {
             // dto를 다시 수정된 걸로 post 변경
             post.update(dto);
             post = postRepository.save(post);
@@ -157,8 +151,7 @@ public class PostService {
 
             return CommonResponse.success(postResponse, "update 게시글 수정 완료");
         }
-        // 비밀번호가 일치하지 않는다면(추후 예외처리 추가)
-//        throw new InvaildPasswordException("비밀번호가 일치하지 않습니다.");
+
       return CommonResponse.error(HttpStatus.BAD_REQUEST, "update 게시글 수정 실패");
     };
 
@@ -168,7 +161,7 @@ public class PostService {
                 .orElseThrow( () -> new PostNotFoundException(id));
 
         String username = jwtValidator.getUserNameFromToken(request);
-//        Objects.equals(post.getPassword(), dto.getPassword()) &&
+
         if (Objects.equals(post.getMember().getUsername(), username)) {
             log.info("delete 게시글 삭제 완료");
             postRepository.delete(post);

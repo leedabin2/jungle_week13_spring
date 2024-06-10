@@ -2,12 +2,10 @@ package com.jungle.week13.post.controller;
 
 
 import com.jungle.week13.common.dto.CommonResponse;
-import com.jungle.week13.post.dto.PostDeleteRequest;
 import com.jungle.week13.post.dto.PostRequest;
 import com.jungle.week13.post.dto.PostResponse;
 import com.jungle.week13.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

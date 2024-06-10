@@ -56,9 +56,6 @@ public class Post{
     @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -83,6 +80,5 @@ public class Post{
         this.note = dto.getNote();
         this.code = dto.getCode();
         this.score = dto.getScore();
-        this.password = dto.getPassword();
     }
 }

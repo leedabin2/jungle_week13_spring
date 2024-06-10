@@ -26,7 +26,6 @@ public class PostResponse {
     private String code;
     private Integer score;
     private String author;
-//    private String password;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 

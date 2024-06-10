@@ -24,8 +24,6 @@ public class PostRequest {
     private Integer score;
     @NotBlank(message = "작성자명은 필수 입력입니다.")
     private String author;
-    @NotBlank(message = "비밀번호는 필수 입력입니다.")
-    private String password;
 
 
 }
