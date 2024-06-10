@@ -16,14 +16,12 @@ public class PostRequest {
     private String content;
     private String example;
     private String link;
-    private String category;
+    private String source;
     private Boolean is_success;
     private Boolean is_review;
     private String note;
     private String code;
-    private Integer score;
-    @NotBlank(message = "작성자명은 필수 입력입니다.")
-    private String author;
+    private String language;
 
 
 }

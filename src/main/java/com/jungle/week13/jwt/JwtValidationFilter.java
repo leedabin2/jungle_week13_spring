@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtValidationFilter extends OncePerRequestFilter {
 
     private final JwtValidator jwtValidator;
-    private final List<String> pathsToAuth = Arrays.asList("POST /api/post","PUT /api/post/{id}", "DELETE /api/post/{id}");
+    private final List<String> pathsToAuth = Arrays.asList("POST /api/post","PUT /api/post/{id}", "DELETE /api/post/{id}", "GET /api/post", "GET /api/post/{id}");
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     public JwtValidationFilter(JwtValidator jwtValidator) {

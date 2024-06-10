@@ -40,9 +40,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/api/post").authenticated() // POST /api/post는 인증 필요
-                        .requestMatchers(HttpMethod.PUT, "/api/post/{id}").authenticated() // PUT, DELETE /api/post/{id}는 인증 필요
+                        .requestMatchers(HttpMethod.POST, "/api/post").authenticated() // POST,GET /api/post는 인증 필요
+                        .requestMatchers(HttpMethod.GET, "/api/post").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/post/{id}").authenticated() // PUT, DELETE, GET /api/post/{id}는 인증 필요
                         .requestMatchers(HttpMethod.DELETE,"/api/post/{id}").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/post/{id}").authenticated()
                         .anyRequest().permitAll() // 나머지 요청은 인증 없이 허용
                 )
                     .formLogin(formLogin -> formLogin.disable()) // 폼 로그인 비활성화 (JWT 토큰 인증 사용 예정)

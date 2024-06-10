@@ -35,8 +35,8 @@ public class Post{
     @Column(name = "link")
     private String link;
 
-    @Column(name = "category")
-    private String category;
+    @Column(name = "source")
+    private String source;
 
     @Column(name = "is_success")
     private Boolean is_success;
@@ -50,11 +50,8 @@ public class Post{
     @Column(name = "code")
     private String code;
 
-    @Column(name = "score")
-    private Integer score;
-
-    @Column(name = "author", nullable = false)
-    private String author;
+    @Column(name = "language")
+    private String language;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
@@ -70,15 +67,14 @@ public class Post{
 
     public void update(PostRequest dto) {
         this.title = dto.getTitle();
-        this.author = dto.getAuthor();
         this.content = dto.getContent();
         this.example = dto.getExample();
         this.link = dto.getLink();
-        this.category = dto.getCategory();
+        this.source = dto.getSource();
         this.is_success = dto.getIs_success();
         this.is_review = dto.getIs_review();
         this.note = dto.getNote();
         this.code = dto.getCode();
-        this.score = dto.getScore();
+        this.language = dto.getLanguage();
     }
 }

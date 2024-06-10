@@ -8,6 +8,7 @@ import com.jungle.week13.exception.PostNotFoundException;
 import com.jungle.week13.jwt.JwtValidator;
 import com.jungle.week13.member.entity.Member;
 import com.jungle.week13.member.repository.MemberRepository;
+import com.jungle.week13.post.dto.PostByMemberResponse;
 import com.jungle.week13.post.dto.PostRequest;
 import com.jungle.week13.post.dto.PostResponse;
 import com.jungle.week13.post.entity.Post;
@@ -46,16 +47,15 @@ public class PostService {
 
         Post post = Post.builder()
                         .title(dto.getTitle())
-                        .author(dto.getAuthor())
                         .content(dto.getContent())
                         .example(dto.getExample())
                         .link(dto.getLink())
-                        .category(dto.getCategory())
+                        .source(dto.getSource())
                         .is_success(dto.getIs_success())
                         .is_review(dto.getIs_review())
                         .note(dto.getNote())
                         .code(dto.getCode())
-                        .score(dto.getScore())
+                        .language(dto.getLanguage())
                         .member(member)
                 .build();
 
@@ -81,28 +81,29 @@ public class PostService {
         }
     };
 
-    /* 전체 게시글을 조회하는 메서드 */
-    public CommonResponse<List<PostResponse>> getAllPost() {
+    /* 해당 사용자의 게시글을 조회하는 메서드 */
+    public CommonResponse<List<PostByMemberResponse>> getAllPost(HttpServletRequest request) {
 
         try {
-            // 날짜 순으로 내림차순 정렬
-            List<Post> existingPost = postRepository.findAll(Sort.by(Sort.Direction.DESC,"updatedAt"));
+            String username = jwtValidator.getUserNameFromToken(request);
+
+            Member member = memberRepository.findByUsername(username)
+                    .orElseThrow(() -> new MemberNotFoundException("해당 회원이 없습니다."));
+
+            // 해당 멤버가 있는  날짜 순으로 내림차순 정렬
+            List<Post> existingPost = postRepository.findByMember(member, Sort.by(Sort.Direction.DESC,"updatedAt"));
 
             // 존재하지 않는다면, 에러 처리하는 부분 추가
             if (existingPost.isEmpty()) {
                 return CommonResponse.error(HttpStatus.NOT_FOUND,"게시글이 존재하지 않습니다.");
             }
 
-
-            log.info("post 전체 게시글 조회 성공");
+            log.info("post 해당 회원의 전체 게시글 조회 성공");
             // db에 가져온 목록을 리스트 dto로 변환해서 리턴해줌
-            List<PostResponse> responses = existingPost.stream()
-                    .map(post -> modelMapper.map(post, PostResponse.class))
+            List<PostByMemberResponse> responses = existingPost.stream()
+                    .map(post -> modelMapper.map(post, PostByMemberResponse.class))
                     .collect(Collectors.toList());
-            return CommonResponse.success(responses,"게시글 목록 조회 성공");
-//            return existingPost.stream()
-//                    .map(PostResponse::of)
-//                    .collect(Collectors.toList());
+            return CommonResponse.success(responses,"해당 회원의 게시글 목록 조회 성공");
 
 
         } catch (Exception e) {
@@ -111,19 +112,25 @@ public class PostService {
         }
     };
 
-    /* 선택 게시글 조회하는 메서드 */
-    public CommonResponse<PostResponse> getPostById(final long id) {
+    /* 해당 유저의 선택 게시글 조회하는 메서드 */
+    public CommonResponse<PostResponse> getPostById(final long id,HttpServletRequest request) {
          try {
              Post post = postRepository.findById(id)
                      .orElseThrow(() -> new PostNotFoundException(id));
 
              log.info("post 선택 게시글 조회 성공");
 
-             // db에 가져온 선택 게시글을 dto로 변환
-             /* 정적 팩토리 메서드 패턴 */
-             PostResponse postResponse = PostResponse.of(post);
+             String username = jwtValidator.getUserNameFromToken(request);
 
-             return CommonResponse.success(postResponse, "선택 게시글 조회 성공");
+            if (Objects.equals(post.getMember().getUsername(),username)) {
+
+                // db에 가져온 선택 게시글을 dto로 변환
+                /* 정적 팩토리 메서드 패턴 */
+                PostResponse postResponse = PostResponse.of(post);
+
+                return CommonResponse.success(postResponse, "선택 게시글 조회 성공");
+            }
+            return CommonResponse.error(HttpStatus.BAD_REQUEST,"선택 게시글 목록 조회 실패");
 
          } catch (Exception e) {
              log.error("post 선택 게시글 조회 실패");

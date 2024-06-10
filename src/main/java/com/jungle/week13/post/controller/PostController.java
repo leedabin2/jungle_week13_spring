@@ -2,6 +2,7 @@ package com.jungle.week13.post.controller;
 
 
 import com.jungle.week13.common.dto.CommonResponse;
+import com.jungle.week13.post.dto.PostByMemberResponse;
 import com.jungle.week13.post.dto.PostRequest;
 import com.jungle.week13.post.dto.PostResponse;
 import com.jungle.week13.post.service.PostService;
@@ -30,18 +31,18 @@ public class PostController {
     };
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<PostResponse>>> getAllPost() {
+    public ResponseEntity<CommonResponse<List<PostByMemberResponse>>> getAllPost(HttpServletRequest request) {
 
-        CommonResponse<List<PostResponse>> responses = postService.getAllPost();
+        CommonResponse<List<PostByMemberResponse>> responses = postService.getAllPost(request);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPostById(@PathVariable("id") final long id) {
+    public ResponseEntity<?> getPostById(@PathVariable("id") final long id, HttpServletRequest request) {
 
-        CommonResponse<PostResponse> responses = postService.getPostById(id);
+        CommonResponse<PostResponse> responses = postService.getPostById(id,request);
 
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }

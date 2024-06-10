@@ -13,36 +13,25 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostResponse {
+public class PostByMemberResponse {
     private Long id;
     private String title;
-    private String content;
-    private String example;
-    private String link;
     private String source;
     private Boolean is_success;
     private Boolean is_review;
-    private String note;
-    private String code;
-    private Integer score;
-    private String language;
+    private String link;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
     /* 정적 팩토리 메서드 */
-    public static PostResponse of(Post post) {
-        return PostResponse.builder()
+    public static PostByMemberResponse of(Post post) {
+        return PostByMemberResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
-                .content(post.getContent())
-                .example(post.getExample())
                 .link(post.getLink())
                 .source(post.getSource())
                 .is_success(post.getIs_success())
                 .is_review(post.getIs_review())
-                .note(post.getNote())
-                .code(post.getCode())
-                .language(post.getLanguage())
                 .created_at(post.getCreatedAt())
                 .updated_at(post.getUpdatedAt())
                 .build();
