@@ -49,4 +49,18 @@ public class JwtValidator {
     public Claims getClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(jwtUtil.getSecretKey()).parseClaimsJws(token).getBody();
     }
+
+    /* 토큰에서 username 정보 가져오기 */
+    public String getUserNameFromToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+//        if (authHeader == null) {
+//            throw new InvalidTokenException("Authorization 헤더가 없습니다.");
+//        }
+
+        String token = authHeader.substring(7);
+        Claims claims = Jwts.parser().setSigningKey(jwtUtil.getSecretKey()).parseClaimsJws(token).getBody();
+        return claims.get("username", String.class);
+    }
+
+
 }

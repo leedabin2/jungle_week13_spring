@@ -82,7 +82,7 @@ public class JwtUtil {
 
     /* 토큰에서 사용자 정보 가져오기 */
     public Claims getUserInfoFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJwt(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
     }
 
 

@@ -1,5 +1,6 @@
 package com.jungle.week13.post.entity;
 
+import com.jungle.week13.member.entity.Member;
 import com.jungle.week13.post.dto.PostRequest;
 import jakarta.persistence.*;
 import lombok.*;
@@ -65,6 +66,10 @@ public class Post{
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY) // Member 엔티티와 다대일 관계 설정
+    @JoinColumn(name = "member_id") // 외래 키 컬럼 이름 지정 (member 테이블의 id 참조)
+    private Member member;
 
     public void update(PostRequest dto) {
         this.title = dto.getTitle();

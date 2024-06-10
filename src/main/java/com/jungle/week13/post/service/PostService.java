@@ -3,12 +3,19 @@ package com.jungle.week13.post.service;
 
 import com.jungle.week13.common.dto.CommonResponse;
 import com.jungle.week13.exception.InvaildPasswordException;
+import com.jungle.week13.exception.MemberNotFoundException;
 import com.jungle.week13.exception.PostNotFoundException;
+import com.jungle.week13.jwt.JwtUtil;
+import com.jungle.week13.jwt.JwtValidator;
+import com.jungle.week13.member.entity.Member;
+import com.jungle.week13.member.repository.MemberRepository;
 import com.jungle.week13.post.dto.PostDeleteRequest;
 import com.jungle.week13.post.dto.PostRequest;
 import com.jungle.week13.post.dto.PostResponse;
 import com.jungle.week13.post.entity.Post;
 import com.jungle.week13.post.repository.PostRepository;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -24,16 +31,22 @@ import org.modelmapper.ModelMapper;
 @Service
 @AllArgsConstructor
 public class PostService {
-    // postrequest dto를 post 엔티티로 변환
-    // 레포지토리의 save 메서드 호출하여 db에 저장
-    // 저장된 post 엔티티를 postresponse dto로 변환
-    // 필요한 정보만 json형태로 변환해서 반환 컨트롤러에게
 
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
+    private final JwtUtil jwtUtil;
+    private final JwtValidator jwtValidator;
 
     /* 게시글 작성 관련 메서드 */
-    public CommonResponse<PostResponse> createPostAndSave(PostRequest dto) {
+    public CommonResponse<PostResponse> createPostAndSave(PostRequest dto, HttpServletRequest request) {
+
+        // 토큰에서 사용자 정보를 추출
+        String username = jwtValidator.getUserNameFromToken(request);
+
+        // member respository 에서 username 가져옴
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new MemberNotFoundException("해당 회원이 없습니다."));
 
         Post post = Post.builder()
                         .title(dto.getTitle())
@@ -48,7 +61,7 @@ public class PostService {
                         .code(dto.getCode())
                         .score(dto.getScore())
                         .password(dto.getPassword())
-
+                        .member(member)
                 .build();
 
         Post savePost = null;
@@ -125,14 +138,17 @@ public class PostService {
     };
 
     /* 게시글 수정하는 메서드 */
-    public CommonResponse<PostResponse> updatePost(final long id, PostRequest dto) {
+    public CommonResponse<PostResponse> updatePost(final long id, PostRequest dto,HttpServletRequest request) {
 
         // id에 해당하는 게시글 찾아오기
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException(id));
 
+        // 게시글의 username 을찾아서 토큰에서 추출한 username과 post의 username과 같으면
+        String username = jwtValidator.getUserNameFromToken(request);
+
         // 비밀번호와 일치하는지 확인하기
-        if (Objects.equals(post.getPassword(), dto.getPassword())) {
+        if (Objects.equals(post.getPassword(), dto.getPassword()) && Objects.equals(post.getMember().getUsername(), username)) {
             // dto를 다시 수정된 걸로 post 변경
             post.update(dto);
             post = postRepository.save(post);
@@ -147,11 +163,13 @@ public class PostService {
     };
 
     /* 게시글을 삭제하는 메서드 */
-    public CommonResponse<String> deletePost(final long id, PostDeleteRequest dto) {
+    public CommonResponse<String> deletePost(final long id, HttpServletRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow( () -> new PostNotFoundException(id));
 
-        if (Objects.equals(post.getPassword(), dto.getPassword())) {
+        String username = jwtValidator.getUserNameFromToken(request);
+//        Objects.equals(post.getPassword(), dto.getPassword()) &&
+        if (Objects.equals(post.getMember().getUsername(), username)) {
             log.info("delete 게시글 삭제 완료");
             postRepository.delete(post);
             return CommonResponse.success("게시글 삭제 성공","게시글 삭제를 성공했습니다.");
